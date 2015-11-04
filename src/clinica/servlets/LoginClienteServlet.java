@@ -3,6 +3,7 @@ package clinica.servlets;
 import java.io.IOException;
 
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import clinica.dao.LoginDao;
+import clinica.dao.PessoaDao;;
 
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/LoginClienteServlet")
+public class LoginClienteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,14 +30,18 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		if(session!=null)
 			session.setAttribute("name", n);
-		if(LoginDao.validate(n, p)){
-			RequestDispatcher rd=request.getRequestDispatcher("Altera.jsp");
-			rd.forward(request, response);
-		}
-		else{
-			out.println("<p style=\"color:red\"> Desculpe usuario ou senha incorreto</p>");
-			RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-			rd.include(request, response);
+		try {
+			if(PessoaDao.validate(n,p)){
+				RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");
+				rd.forward(request, response);
+			}
+			else{
+				out.println("<p style=\"color:red\"> Desculpe usuario ou senha incorreto</p>");
+				RequestDispatcher rd=request.getRequestDispatcher("loginCliente.jsp");
+				rd.include(request, response);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		out.close();
 	}
