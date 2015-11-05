@@ -19,47 +19,6 @@ public class PessoaDao implements DAO<Pessoa>{
 	public PessoaDao(){
 		PessoaDao.conn = new ConnectionBanc().getConnection();
 	}
-	
-	public static boolean validate(String nome, String pass) throws SQLException {
-		boolean status=false;
-		ResultSet rs = null;
-		PreparedStatement stmt = null;
-		
-		try{
-			stmt = conn.prepareStatement("select * from Pacientes where Nome=? and Senha=?");
-			
-			stmt.setString(1, nome);
-			stmt.setString(2, pass);
-			
-			rs = stmt.executeQuery();
-			status = rs.next();
-		} catch (Exception e){
-			System.out.println(e);
-		} finally {
-			if (conn != null){
-				try {
-					conn.close();
-				}catch(SQLException e){
-					e.printStackTrace();
-				}
-			}
-			if (stmt != null){
-				try{
-					stmt.close();
-				}catch (SQLException e){
-					e.printStackTrace();
-				}
-			}
-			if (rs != null){
-				try{
-					rs.close();
-				}catch(SQLException e){
-					e.printStackTrace();
-				}
-			}
-		}
-		return status;
-	}
 
 	@Override
 	public void adiciona(Pessoa entidade) throws SQLException {

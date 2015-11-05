@@ -83,8 +83,6 @@ public class PessoaServlet extends HttpServlet {
 			
 			Integer id = 0;
 			
-			
-			
 			String nome = request.getParameter("nome");
 			String senha = request.getParameter("senha");
 			int CEP = Integer.parseInt(request.getParameter("CEP"));
