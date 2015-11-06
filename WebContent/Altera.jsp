@@ -69,6 +69,7 @@
 			<th>CEP</th>
 			<th>Numero</th>
 			<th>Complemento</th>
+			<th>Disable</th>
 		</tr>
 			<%while(rs.next()){%>
 				<%entidade = new Pessoa();%>
@@ -79,6 +80,7 @@
 						<td><%=rs.getInt("CEP")%></td>
 						<td><%=rs.getInt("Numero")%></td>
 						<td><%=rs.getString("Complemento")%></td>
+						<td><%=rs.getInt("Disable")%></td>
 					</tr>
 			<%}%>
 	</table>

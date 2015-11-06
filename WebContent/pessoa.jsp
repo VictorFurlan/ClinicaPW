@@ -63,6 +63,8 @@
 		</tr>
 			<%while(rs.next()){%>
 				<%entidade = new Pessoa();%>
+				<%if (rs.getInt("Disable")==1){%>
+				<%rs.next();}%>
 					<tr>
 						<td><%=rs.getLong("id")%></td>
 						<td><%=rs.getString("Nome")%></td>

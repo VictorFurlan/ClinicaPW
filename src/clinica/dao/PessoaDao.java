@@ -116,7 +116,7 @@ public class PessoaDao implements DAO<Pessoa>{
 	public void deleta(Pessoa entidade) throws SQLException {
 		PreparedStatement stmt = null;
 		try{
-			stmt = (PreparedStatement)conn.prepareStatement("delete from Pacientes where ID =?");
+			stmt = (PreparedStatement)conn.prepareStatement("update Pacientes set Disable=1 where ID =?");
 			
 			stmt.setLong(1, entidade.getId());
 			stmt.executeUpdate();

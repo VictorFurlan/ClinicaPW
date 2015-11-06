@@ -73,7 +73,7 @@ public class PessoaServlet extends HttpServlet {
 			
 			try{
 				dao.deleta(pessoa);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("pessoa.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("Altera.jsp");
 				dispatcher.forward(request, response);
 			}catch(SQLException e){
 				e.printStackTrace();
