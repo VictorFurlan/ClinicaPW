@@ -7,7 +7,7 @@
 <title>App Login - PW</title>
 </head>
 <body>
-	<form action="logincliente" method="post">
+	<form action="LoginServlet" method="post">
 		<fieldset style = "width: 300px">
 			<legend> Login to app</legend>
 			<table>

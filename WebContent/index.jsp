@@ -7,7 +7,7 @@
 <title>App Login - PW</title>
 </head>
 <body>
-	<form action="LoginServlet" method="post">
+	<form action="logincliente" method="post">
 		<fieldset style = "width: 300px">
 			<legend> Login to app</legend>
 			<table>
@@ -22,7 +22,7 @@
 				<tr>
 					<td><input type="submit" value="Login" /></td>
 					<td><input type="button" value="Cadastrar" OnClick="parent.location.href='pessoa.jsp'"/></td>
-					<td><input type="button" value="Logar como Paciente" OnClick="parent.location.href='loginCliente.jsp'"/></td>
+					<td><input type="button" value="Logar como Admin" OnClick="parent.location.href='loginAdmin.jsp'"/></td>
 				</tr>
 			</table>
 		</fieldset>

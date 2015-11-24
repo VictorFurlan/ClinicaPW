@@ -13,6 +13,14 @@ public class LoginDao {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		
+		/*
+		    String url = "jdbc:mysql://179.188.16.24:3306/";
+			String dbName = "c_araujo";
+			String driver = "com.mysql.jdbc.Driver";
+			String userName = "c_araujo";
+			String password = "Dilma24@mor";
+		 */
+		
 		String url = "jdbc:mysql://179.188.16.24:3306/";
 		String dbName = "c_araujo";
 		String driver = "com.mysql.jdbc.Driver";
