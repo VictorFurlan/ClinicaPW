@@ -42,6 +42,11 @@
 			<label id="complemento">Complemento:</label><input id="complemento" name="complemento" type="text" size="45">
 		</div>
 		<div align="left">
+			<label id="Operadora">Operadora:</label><input id="Operadora" name="Operadora" type="text" size="45">
+		</div>
+		<div align="left">
+			<label id="CdArea">DDD:</label><input id="CdArea" name="CdArea" type="text" size="10"><label id="Telefone">Telefone:</label><input id="Telefone" name="Telefone" type="text" size="45">
+		</div>
 			<label id="id">ID:</label><input id="id" name="id" type="text" size="45">
 		</div>
 		<br>
@@ -56,11 +61,18 @@
 	<table border="1">
 		<%Connection conn; %>
 		<%conn = new ConnectionBanc().getConnection();%>
+		<%String nome = session.getAttribute("name").toString();%>
 		<%String sql = "select * from Pacientes";%>
-		<%PreparedStatement stmt = null;%>
-		<%ResultSet rs = null;%>
+		<%String sqlTel = "select * from Telefones";%>
+		<%String sqlTelTipo = "select * from TiposDeTelefone";%>
+		<%PreparedStatement stmt = null, stmtT = null, stmtTT = null;%>
+		<%ResultSet rs = null, rsT = null, rsTT = null;%>
 		<%stmt = conn.prepareStatement(sql);%>
+		<%stmtTT = conn.prepareStatement(sqlTelTipo);%>
+		<%stmtT = conn.prepareStatement(sqlTel);%>
 		<%rs = stmt.executeQuery();%>
+		<%rsT = stmtT.executeQuery();%>
+		<%rsTT = stmtTT.executeQuery();%>
 		<%Pessoa entidade = null;%>
 		<tr>
 			<th>ID</th>
@@ -68,20 +80,26 @@
 			<th>Senha</th>
 			<th>CEP</th>
 			<th>Numero</th>
+			<th>Operadora</th>
+			<th>Area</th>
+			<th>Telefone</th>
 			<th>Complemento</th>
-			<th>Disable</th>
 		</tr>
 			<%while(rs.next()){%>
 				<%entidade = new Pessoa();%>
 					<tr>
-						<td><%=rs.getLong("id")%></td>
+						<td><%=rs.getInt("ID")%></td>
 						<td><%=rs.getString("Nome")%></td>
 						<td><%=rs.getString("senha")%></td>
 						<td><%=rs.getInt("CEP")%></td>
 						<td><%=rs.getInt("Numero")%></td>
+						<td><%=rsTT.getString("Operadora")%></td>
+						<td><%=rsT.getInt("CdArea")%></td>
+						<td><%=rsT.getInt("Telefone")%></td>
 						<td><%=rs.getString("Complemento")%></td>
-						<td><%=rs.getInt("Disable")%></td>
 					</tr>
+				<%rsT.next();
+				rsTT.next(); %>
 			<%}%>
 	</table>
 </body>

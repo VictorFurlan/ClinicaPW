@@ -23,10 +23,16 @@ public class PessoaDao implements DAO<Pessoa>{
 	@Override
 	public void adiciona(Pessoa entidade) throws SQLException {
 		String sql = "insert into Pacientes (Nome,Senha,CEP,Numero,Complemento)values(?,?,?,?,?)";
+		String sqlTel = "insert into Telefones (Area,Numero)values(?,?)";
+		String sqlTelTipo = "insert into TiposDeTelefone (Nome)values(?)";
 		
 		PreparedStatement stmt = null;
+		PreparedStatement stmtTel = null;
+		PreparedStatement stmtTelTipo = null;
 		try{
 			stmt = conn.prepareStatement(sql);
+			stmtTel = conn.prepareStatement(sqlTel);
+			stmtTelTipo = conn.prepareStatement(sqlTelTipo);
 			
 			stmt.setString(1, entidade.getNome());
 			stmt.setString(2, entidade.getSenha());
@@ -34,11 +40,20 @@ public class PessoaDao implements DAO<Pessoa>{
 			stmt.setInt(4, entidade.getNumero());
 			stmt.setString(5, entidade.getComplemento());
 			
+			stmtTel.setInt(1, entidade.getCdArea());
+			stmtTel.setInt(2, entidade.getTelefone());
+			
+			stmtTelTipo.setString(1, entidade.getOperadora());
+			
 			stmt.executeUpdate();
+			stmtTel.executeUpdate();
+			stmtTelTipo.executeUpdate();
 		}catch(SQLException e){
 			throw new RuntimeException(e);
 		}finally{
 			stmt.close();
+			stmtTel.close();
+			stmtTelTipo.close();
 			conn.close();
 		}
 	}
@@ -46,6 +61,8 @@ public class PessoaDao implements DAO<Pessoa>{
 	@Override
 	public void altera(Pessoa entidade) throws SQLException {
 		String sql = "update Pacientes set ";
+		String sqlTel = "update Telefones set ";
+		String sqlTelTipo = "update TiposDeTelefone set ";
 		int flag = 0;
 		
 		if(entidade.getNome() != null && !entidade.getNome().equals("")){
@@ -80,11 +97,31 @@ public class PessoaDao implements DAO<Pessoa>{
 			sql = sql + "Complemento=?";
 			flag=1;
 		}
+		if(entidade.getCdArea() != 0 && entidade.getCdArea() > 0){
+			sqlTel = sqlTel + "Area=?";
+			flag = 1;
+		}
+		if(entidade.getTelefone() >0){
+			if(flag==1)
+				sqlTel = sqlTel + ",";
+			
+			sqlTel = sqlTel + "Numero=?";
+			flag=1;
+		}
+		if(entidade.getOperadora() != null && !entidade.getOperadora().equals("")){
+			sqlTelTipo = sqlTelTipo + "Nome=?";
+			flag = 1;
+		}
 		sql = sql + "where id=?";
 		
 		PreparedStatement stmt = null;
+		PreparedStatement stmtTel = null;
+		PreparedStatement stmtTelTipo = null;
 		try{
 			stmt = (PreparedStatement)conn.prepareStatement(sql);
+			stmtTel = (PreparedStatement)conn.prepareStatement(sqlTel);
+			stmtTelTipo = (PreparedStatement)conn.prepareStatement(sqlTelTipo);
+			
 			if(entidade.getNome() != null && !entidade.getNome().equals("")){
 				stmt.setString(1, entidade.getNome());
 			}
@@ -100,14 +137,27 @@ public class PessoaDao implements DAO<Pessoa>{
 			if(entidade.getComplemento() != null && !entidade.getComplemento().equals("")){
 				stmt.setString(5, entidade.getComplemento());
 			}
+			if(entidade.getCdArea() >0){
+				stmtTel.setInt(1, entidade.getCdArea());
+			}
+			if(entidade.getTelefone() >0){
+				stmtTel.setInt(2, entidade.getTelefone());
+			}
+			if(entidade.getOperadora() != null && !entidade.getOperadora().equals("")){
+				stmtTelTipo.setString(1, entidade.getOperadora());
+			}
 			stmt.setLong(6, entidade.getId());
 			
 			stmt.executeUpdate();
+			stmtTel.executeUpdate();
+			stmtTelTipo.executeUpdate();
 			JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
 		}catch(SQLException e){
 			throw new RuntimeException(e);
 		}finally{
 			stmt.close();
+			stmtTel.close();
+			stmtTelTipo.close();
 			conn.close();
 		}
 	}
@@ -133,48 +183,78 @@ public class PessoaDao implements DAO<Pessoa>{
 	public Pessoa lista(String Pesquisa) throws SQLException {
 		Pessoa entidade = new Pessoa();
 		String sql = "select * from Pacientes where id=?";
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		String sqlTel = "select * from Telefones";
+		String sqlTelTipo = "select * from TiposDeTelefone";
+		PreparedStatement stmt = null, stmtTel = null, stmtTelTipo = null;
+		ResultSet rs = null, rsTel = null, rsTelTipo = null;
 		try{
 			stmt = (PreparedStatement)conn.prepareStatement(sql);
+			stmtTel = (PreparedStatement)conn.prepareStatement(sqlTel);
+			stmtTelTipo = (PreparedStatement)conn.prepareStatement(sqlTelTipo);
 			
 			stmt.setLong(1, entidade.getId());
+			stmtTel.setLong(1, entidade.getTelefone());
+			stmtTelTipo.setLong(1, entidade.getId());
+			
 			rs = stmt.executeQuery();
+			rsTel = stmtTel.executeQuery();
+			rsTelTipo = stmtTelTipo.executeQuery();
 			
 			if(rs.next()){
+				rsTel.next();
+				rsTelTipo.next();
+				
 				entidade.setId(rs.getLong("id"));
 				entidade.setNome(rs.getString("Nome"));
 				entidade.setSenha(rs.getString("senha"));
 				entidade.setCEP(rs.getInt("CEP"));
 				entidade.setCEP(rs.getInt("Numero"));
 				entidade.setComplemento(rs.getString("Complemento"));
+				
+				entidade.setCdArea(rsTel.getInt("Area"));
+				entidade.setTelefone(rsTel.getInt("Numero"));
+				
+				entidade.setOperadora(rsTelTipo.getString("Nome"));
 			}
 		}catch(SQLException e){
 			throw new RuntimeException(e);
 		}finally{
 			stmt.close();
+			stmtTel.close();
+			stmtTelTipo.close();
+			
 			rs.close();
+			rsTel.close();
+			rsTelTipo.close();
+			
 			conn.close();
 		}
-		
 		return entidade;
 	}
-
+	
 	@SuppressWarnings("null")
 	@Override
 	public List<Pessoa> listaTudo() throws SQLException {
 		List<Pessoa>pessoas = new ArrayList<Pessoa>();
 		String sql = "select * from Pacientes";
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		String sqlTel = "select * from Telefones";
+		String sqlTelTipo = "select * from TiposDeTelefone";
+		PreparedStatement stmt = null, stmtTel = null, stmtTelTipo = null;
+		ResultSet rs = null, rsTel = null, rsTelTipo = null;
 		try{
 			stmt = conn.prepareStatement(sql);
+			stmtTel = conn.prepareStatement(sqlTel);
+			stmtTelTipo = conn.prepareStatement(sqlTelTipo);
 			stmt.executeUpdate();
+			stmtTel.executeUpdate();
+			stmtTelTipo.executeUpdate();
 			Pessoa entidade = null;
 			
 			while(((ResultSet) stmt).next()){
+				((ResultSet) stmtTel).next();
+				((ResultSet) stmtTelTipo).next();
 				entidade = new Pessoa();
-				
+
 				entidade.setId(rs.getLong("id"));
 				entidade.setNome(rs.getString("Nome"));
 				entidade.setSenha(rs.getString("senha"));
@@ -182,13 +262,24 @@ public class PessoaDao implements DAO<Pessoa>{
 				entidade.setNumero(rs.getInt("Numero"));
 				entidade.setComplemento(rs.getString("Complemento"));
 				
+				entidade.setCdArea(rsTel.getInt("Area"));
+				entidade.setTelefone(rsTel.getInt("Numero"));
+				
+				entidade.setOperadora(rsTelTipo.getString("Nome"));
+				
 				pessoas.add(entidade);
 			}
 		}catch(SQLException e){
 			throw new RuntimeException(e);
 		}finally{
 			stmt.close();
+			stmtTel.close();
+			stmtTelTipo.close();
+			
 			rs.close();
+			rsTel.close();
+			rsTelTipo.close();
+			
 			conn.close();
 		}
 		return pessoas;

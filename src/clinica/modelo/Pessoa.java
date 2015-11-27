@@ -6,16 +6,35 @@ public class Pessoa {
 	protected String senha;
 	protected int CEP;
 	protected int Numero;
+	protected String Operadora;
+	protected int CdArea;
+	protected int Telefone;
 	protected String complemento;
 	
-
+	public String getOperadora() {
+		return Operadora;
+	}
+	public void setOperadora(String operadora) {
+		Operadora = operadora;
+	}
+	public int getCdArea() {
+		return CdArea;
+	}
+	public void setCdArea(int cdArea) {
+		CdArea = cdArea;
+	}
+	public int getTelefone() {
+		return Telefone;
+	}
+	public void setTelefone(int telefone) {
+		Telefone = telefone;
+	}
 	public String getSenha() {
 		return senha;
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
 	public long getId() {
 		return id;
 	}

@@ -40,6 +40,9 @@ public class PessoaServlet extends HttpServlet {
 			int CEP = Integer.parseInt(request.getParameter("CEP"));
 			int Numero = Integer.parseInt(request.getParameter("Numero"));
 			String complemento = request.getParameter("complemento");
+			int CdArea = Integer.parseInt(request.getParameter("CdArea"));
+			int Telefone = Integer.parseInt(request.getParameter("Telefone"));
+			String Operadora = request.getParameter("Operadora");
 			
 			Pessoa pessoa = new Pessoa();
 			pessoa.setNome(nome);
@@ -47,6 +50,9 @@ public class PessoaServlet extends HttpServlet {
 			pessoa.setCEP(CEP);
 			pessoa.setNumero(Numero);
 			pessoa.setComplemento(complemento);
+			pessoa.setCdArea(CdArea);
+			pessoa.setTelefone(Telefone);
+			pessoa.setOperadora(Operadora);
 			
 			try{
 				if(id != null && id > 0){
@@ -88,6 +94,9 @@ public class PessoaServlet extends HttpServlet {
 			int CEP = Integer.parseInt(request.getParameter("CEP"));
 			int Numero = Integer.parseInt(request.getParameter("Numero"));
 			String complemento = request.getParameter("complemento");
+			int CdArea = Integer.parseInt(request.getParameter("CdArea"));
+			int Telefone = Integer.parseInt(request.getParameter("Telefone"));
+			String Operadora = request.getParameter("Operadora");
 			if(request.getParameter("id") != null && !request.getParameter("id").equals("")){
 				id = Integer.parseInt(request.getParameter("id"));
 			}
@@ -98,6 +107,9 @@ public class PessoaServlet extends HttpServlet {
 			pessoa.setCEP(CEP);
 			pessoa.setNumero(Numero);
 			pessoa.setComplemento(complemento);
+			pessoa.setCdArea(CdArea);
+			pessoa.setTelefone(Telefone);
+			pessoa.setOperadora(Operadora);
 			
 			try{
 				if(id != null && id > 0){
